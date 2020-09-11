@@ -35,7 +35,7 @@ public class SecurityConfiguaration extends WebSecurityConfigurerAdapter{
 		//Now the Chaining of roles
 		http.authorizeRequests()
 		.antMatchers("/admin").hasRole("ADMIN")
-		.antMatchers("/user").hasAnyRole("USER","ADMIN")
+		.antMatchers("/user").hasRole("USER","ADMIN")
 		.antMatchers("/").permitAll()
 		.and().formLogin();
 	}
