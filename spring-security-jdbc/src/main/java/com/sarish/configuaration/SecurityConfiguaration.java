@@ -19,13 +19,21 @@ public class SecurityConfiguaration extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//		auth.jdbcAuthentication()
+//		.dataSource(dataSource)
+//		.withDefaultSchema() //this creates a default schema in h2 database
+//		.withUser(User.withUsername("User").password("User").roles("USER"))
+//		.withUser(User.withUsername("Admin").password("Admin").roles("ADMIN"))
+//		.withUser(User.withUsername("Ani").password("Ani").roles("USER"))
+//		.withUser(User.withUsername("Sarish").password("Sarish").roles("ADMIN"));
+		
+		//Now We get rid of DefaultSchema cause its not useful for production environment
+		//https://docs.spring.io/spring-security/site/docs/current/reference/html5/#servlet-authentication-jdbc
+		//The above site for schema docs and defination
 		auth.jdbcAuthentication()
 		.dataSource(dataSource)
-		.withDefaultSchema() //this creates a default schema in h2 database
-		.withUser(User.withUsername("User").password("User").roles("USER"))
-		.withUser(User.withUsername("Admin").password("Admin").roles("ADMIN"))
-		.withUser(User.withUsername("Ani").password("Ani").roles("USER"))
-		.withUser(User.withUsername("Sarish").password("Sarish").roles("ADMIN"));
+		.usersByUsernameQuery("select username, password , enabled "+"from users "+"where username = ?")
+		.authoritiesByUsernameQuery("select username, authority "+"from authorities "+"where username = ?");
 	}
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
